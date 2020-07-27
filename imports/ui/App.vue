@@ -28,10 +28,20 @@
                 </div>
 
                 <ProductCard
+                    v-if="products"
                     v-for="product in products"
                     v-bind:key="product._id"
                     v-bind:product="product"
                 />
+
+                <template v-if="products.length === 0">
+                    <div class="lds-ellipsis">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </template>
 
                 <AddCategoryModal/>
                 <AddProductModal/>
@@ -61,10 +71,12 @@
             return {
                 products: [],
                 selectedCategory: null,
-                selectedCategoryName: ''
+                selectedCategoryName: '',
+                isLoading: true,
             };
         },
         mounted() {
+            //this.isLoading = true;
             if (this.selectedCategory === null) {
                 this.selectedCategoryName = 'All';
             }
@@ -93,7 +105,9 @@
             },
             products() {
                 if (this.selectedCategory === null) {
-                    return this.products = Products.find({}).fetch();
+                    setTimeout(() => {
+                        return this.products = Products.find({}).fetch();
+                    }, 1000)
                 }
             },
             categories() {
