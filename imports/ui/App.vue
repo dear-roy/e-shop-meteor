@@ -1,11 +1,11 @@
 <template>
     <div>
-        <Navbar/>
+        <Navbar :is-logged-in="isLoggedIn" @loggedUser="loggedUser"/>
         <br/>
         <div class="container mt-5">
             <div class="row">
 
-                <div class="col-12">
+                <div class="col-11">
                     <p class="display-4">
                         Showing Products
 
@@ -26,6 +26,15 @@
 
                     </p>
                 </div>
+
+              <div class="col-1">
+                <p class="lead mt-3 small">
+                  Products:
+                  <span id="productAmount">
+                    {{ totalProducts }}
+                  </span>
+                </p>
+              </div>
 
                 <ProductCard
                     v-if="products"
@@ -59,6 +68,7 @@
 
     import { Products } from "../api/products";
     import { Categories } from "../api/categories";
+    import { Users } from "../api/users";
 
     export default {
         components: {
@@ -73,6 +83,9 @@
                 selectedCategory: null,
                 selectedCategoryName: '',
                 isLoading: true,
+                totalProducts: null,
+                isLoggedIn: false,
+                loggedUserData: {}
             };
         },
         mounted() {
@@ -96,22 +109,31 @@
                 }).fetch();
 
                 this.products = products;
-            }
+                this.totalProducts = products.length;
+            },
+          loggedUser (value) {
+              this.loggedUserData = value;
+          }
         },
         meteor: {
             $subscribe: {
                 products: [],
-                categories: []
+                categories: [],
+                users: []
             },
             products() {
                 if (this.selectedCategory === null) {
                     setTimeout(() => {
                         return this.products = Products.find({}).fetch();
-                    }, 1000)
+                    }, 1000);
+                  this.totalProducts = this.products.length;
                 }
             },
             categories() {
                 return Categories.find({}).fetch();
+            },
+            users() {
+              return Users.find().fetch({});
             }
         }
     };

@@ -24,7 +24,7 @@
                             </div>
                         </div>
 
-                        <p class="lead">
+                        <p class="">
                             {{ this.product.description }}
                         </p>
 

@@ -6,6 +6,12 @@ import "../imports/api/categories";
 // Products
 import "../imports/api/products";
 
+// Users
+import "../imports/api/users";
+import {Users} from "../imports/api/users";
+
 Meteor.startup(() => {
-  // code to run on server at startup
+    if (Users.find({isAdmin: true}).count() === 0) {
+        Meteor.call('users.insert', 'Admin', 'admin@admin.com', 'password', true)
+    }
 });
