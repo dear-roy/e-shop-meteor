@@ -28,6 +28,6 @@
   },
   "devDependencies": {
     "@vue/test-utils": "^1.0.3",
-    "vue-jest": "^3.0.6"
+    "vue-jest": "^4.0.1"
   }
 }
